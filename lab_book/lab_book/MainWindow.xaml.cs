@@ -15,6 +15,7 @@ namespace lab_book
     /// </summary>
     public partial class MainWindow : Window
     {
+        Settings ajustes = new Settings();
         string pathFile = "myfile.lbb";
 
         public ObservableCollection<LabBook> labs { get; set; }
@@ -22,6 +23,7 @@ namespace lab_book
         public MainWindow()
         {
             this.labs = new ObservableCollection<LabBook>();
+            ajustes.initStructure();
             if (File.Exists(pathFile))
             {
                 IFormatter formatter = new BinaryFormatter();
