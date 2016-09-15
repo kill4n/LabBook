@@ -29,11 +29,12 @@
         <TextBlock Grid.Row="2" Text="Date:" FontWeight="Bold" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="3" Text="Description:" FontWeight="Bold" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="5" Text="Comment:" FontWeight="Bold" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding experiment, Mode=TwoWay}" />
-        <TextBox Grid.Row="1" Grid.Column="1" Height="20" Text="{Binding author, Mode=TwoWay}" />
-        <TextBox Grid.Row="2" Grid.Column="1" Height="20" Text="{Binding date, StringFormat=d, Mode=TwoWay}" />
-        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding description, Mode=TwoWay}" />
-        <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding comment, Mode=TwoWay}" />
+        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding experiment, Mode=OneTime}" x:Name="experiment"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Height="20" Text="{Binding author, Mode=OneTime}" x:Name="author" />
+        <DatePicker Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Center" Text="{Binding date, Mode=OneTime}" x:Name="date"/>
+        <!--TextBox Grid.Row="2" Grid.Column="1" Height="20" Text="{Binding date, StringFormat=d, Mode=TwoWay}" /-->
+        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding description, Mode = OneTime}" x:Name="description"/>
+        <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding comment, Mode = OneTime}" x:Name="comment"/>
         <Grid Grid.Row="7" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>

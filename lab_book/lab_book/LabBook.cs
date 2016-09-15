@@ -6,9 +6,9 @@ namespace lab_book
     public class LabBook : NotifyBase
     {
         #region Atributos
-        private DateTime _date;
+        private DateTime _date = DateTime.Today;
         private string _experiment = "Experiment name.";
-        private string _author = "Author nName";
+        private string _author = "Author name";
         private string _description = "Describe the experiment.";
         private string _comment = "Comment...";
         #endregion
@@ -43,18 +43,11 @@ namespace lab_book
         }
         #endregion
 
+        #region Metodos
         public LabBook Clone()
         {
             return (LabBook)MemberwiseClone();
         }
-
-        public void Load(LabBook lb)
-        {
-            this.experiment = lb.experiment;
-            this.date = lb.date;
-            this.description = lb.description;
-            this.author = lb.author;
-            this.comment = lb.comment;
-        }
+        #endregion
     }
 }

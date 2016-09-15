@@ -40,10 +40,13 @@ namespace lab_book
         {
             //Save
             this.DialogResult = true;
-            if (!isNew)
-            {
-                //((LabBook)DataContext).Load(tmp);
-            }
+
+            ((LabBook)DataContext).experiment = experiment.Text;
+            ((LabBook)DataContext).author = author.Text;
+            ((LabBook)DataContext).date = date.DisplayDate;
+            ((LabBook)DataContext).description = description.Text;
+            ((LabBook)DataContext).comment = comment.Text;
+
             this.Close();
         }
 
@@ -51,10 +54,6 @@ namespace lab_book
         {
             //Cancel
             this.DialogResult = false;
-            if (!isNew)
-            {
-                ((LabBook)DataContext).Load(tmp);
-            }
             this.Close();
         }
 
