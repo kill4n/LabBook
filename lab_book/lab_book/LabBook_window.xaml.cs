@@ -21,25 +21,33 @@ namespace lab_book
     {
         bool isNew = true;
         LabBook tmp;
+        private Settings ajustes;
+
         public LabBook_window()
         {
             InitializeComponent();
             if (isNew)
             {
-                this.DataContext = new LabBook();
+                DataContext = new LabBook() { author = ajustes.DefaultAuthor };
+
             }
         }
         public LabBook_window(LabBook lab) : this()
         {
             isNew = false;
             tmp = lab.Clone();
-            this.DataContext = lab;
+            DataContext = lab;
+        }
+
+        public LabBook_window(Settings ajustes)
+        {
+            this.ajustes = ajustes;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //Save
-            this.DialogResult = true;
+            DialogResult = true;
 
             ((LabBook)DataContext).experiment = experiment.Text;
             ((LabBook)DataContext).author = author.Text;
