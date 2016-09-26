@@ -28,6 +28,19 @@ namespace lab_book
             this.initStructure();
             InitializeComponent();
             labb.DataContext = labs.FirstOrDefault();
+            readLabs();
+        }
+        void readLabs()
+        {
+            var labDirs = Directory.EnumerateDirectories(ajustes.DataPath + "labbooks").ToList();
+            foreach (var ldir in labDirs)
+            {
+                var serializer = new XmlSerializer(typeof(LabBook));
+                using (var reader = XmlReader.Create(ldir + "/lab.xml"))
+                {
+                    labs.Add((LabBook)serializer.Deserialize(reader));
+                }
+            }
         }
 
         public void initStructure()
@@ -60,7 +73,7 @@ namespace lab_book
             var item = (sender as ListView).SelectedItem;
             if (item != null)
             {
-                LabBook_window lbv = new LabBook_window((LabBook)item);
+                LabBook_window lbv = new LabBook_window((LabBook)item, ajustes);
                 lbv.ShowTupleDialog();
             }
         }
@@ -77,15 +90,10 @@ namespace lab_book
         //                         FileAccess.Write, FileShare.None);
         //formatter.Serialize(stream, labs);
         //stream.Close();
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //Open
-
-        }
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            //New
+            //New            
             LabBook_window lbv = new LabBook_window(ajustes);
             LabBook lbNew = lbv.ShowTupleDialog();
             if (lbNew != null)

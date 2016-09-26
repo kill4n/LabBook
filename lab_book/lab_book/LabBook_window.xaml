@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lab_book"
         mc:Ignorable="d"
-        Title="{Binding experiment}" Height="400" Width="400" >
+        Title="{Binding experiment}" Height="400" Width="650" >
     <Window.DataContext>
         <local:LabBook/>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="31*"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -24,18 +25,18 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Experiment:" FontWeight="Bold" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="1" Text="Author:" FontWeight="Bold" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="2" Text="Date:" FontWeight="Bold" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="3" Text="Description:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Text="Experiment:" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="1" Text="Author:" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="2" Text="Date:" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="3" Text="Description:" FontWeight="Bold" VerticalAlignment="Center" />
         <TextBlock Grid.Row="5" Text="Comment:" FontWeight="Bold" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding experiment, Mode=OneTime}" x:Name="experiment"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding experiment, Mode=OneTime}" x:Name="experiment" />
         <TextBox Grid.Row="1" Grid.Column="1" Height="20" Text="{Binding author, Mode=OneTime}" x:Name="author" />
         <DatePicker Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Center" Text="{Binding date, Mode=OneTime}" x:Name="date"/>
         <!--TextBox Grid.Row="2" Grid.Column="1" Height="20" Text="{Binding date, StringFormat=d, Mode=TwoWay}" /-->
-        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding description, Mode = OneTime}" x:Name="description"/>
-        <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding comment, Mode = OneTime}" x:Name="comment"/>
-        <Grid Grid.Row="7" Grid.ColumnSpan="2">
+        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding description, Mode = OneTime}" x:Name="description"/>
+        <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding comment, Mode = OneTime}" x:Name="comment"/>
+        <Grid Grid.Row="7" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
@@ -43,5 +44,12 @@
             <Button Grid.Column="0" Content="Save" Margin="8,4" Click="Button_Click"/>
             <Button Grid.Column="1" Content="Cancel" Margin="10,4" Click="Button_Click_1"/>
         </Grid>
+        
+        <ScrollViewer Grid.Column="2" HorizontalAlignment="Stretch" Margin="10" Grid.Row="0" Grid.RowSpan="8" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" >
+            <StackPanel x:Name="imagenes" Background="#DDDDDD" AllowDrop="True" DragEnter="imagenes_DragEnter" Drop="imagenes_Drop"
+                        >
+                
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
