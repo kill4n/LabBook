@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace lab_book
 {
@@ -21,25 +16,44 @@ namespace lab_book
     {
         bool isNew = true;
         LabBook tmp;
+        private Settings ajustes;
+
         public LabBook_window()
         {
             InitializeComponent();
-            if (isNew)
-            {
-                this.DataContext = new LabBook();
-            }
+            //if (isNew)
+            //{
+            //    var labs = Directory.EnumerateDirectories(ajustes.DataPath + "labbooks").Count();
+            //    DataContext = new LabBook() { author = ajustes.DefaultAuthor, folder = "Lab_" + (labs + 1) };
+            //    Directory.CreateDirectory(ajustes.DataPath + "labbooks/" + ((LabBook)DataContext).folder);
+            //}
         }
-        public LabBook_window(LabBook lab) : this()
+        public LabBook_window(LabBook lab, Settings ajustes)
         {
+            this.ajustes = ajustes;
+
+            InitializeComponent();
             isNew = false;
             tmp = lab.Clone();
-            this.DataContext = lab;
+            DataContext = lab;
+        }
+
+        public LabBook_window(Settings ajustes)
+        {
+            this.ajustes = ajustes;
+            InitializeComponent();
+            if (isNew)
+            {
+                var labs = Directory.EnumerateDirectories(ajustes.DataPath + "labbooks").Count();
+                DataContext = new LabBook() { author = ajustes.DefaultAuthor, folder = "Lab_" + (labs + 1) };
+                Directory.CreateDirectory(ajustes.DataPath + "labbooks/" + ((LabBook)DataContext).folder);
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //Save
-            this.DialogResult = true;
+            DialogResult = true;
 
             ((LabBook)DataContext).experiment = experiment.Text;
             ((LabBook)DataContext).author = author.Text;
@@ -47,7 +61,13 @@ namespace lab_book
             ((LabBook)DataContext).description = description.Text;
             ((LabBook)DataContext).comment = comment.Text;
 
-            this.Close();
+            var serializer = new XmlSerializer(((LabBook)DataContext).GetType());
+            using (var writer = XmlWriter.Create(ajustes.DataPath + "labbooks/" + ((LabBook)DataContext).folder + "/lab.xml"))
+            {
+                serializer.Serialize(writer, (LabBook)DataContext);
+            }
+
+            Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -73,6 +93,36 @@ namespace lab_book
             else
             {
                 return null;
+            }
+        }
+
+        private void imagenes_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void imagenes_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string fileImg = ((string[])e.Data.GetData(DataFormats.FileDrop)).FirstOrDefault();
+                string ex = fileImg.Split('.').Last();
+                string newPath = ajustes.DataPath + "labbooks/" + ((LabBook)DataContext).folder + "/" + DateTime.Now.Millisecond + "." + ex;
+                //   File.Copy(fileImg, newPath);
+
+                Image img = new Image() { Margin = new Thickness(10) };
+                var uri = new Uri(fileImg);
+                var bitmap = new BitmapImage(uri);
+                img.Source = bitmap;
+                imagenes.Children.Add(img);
             }
         }
     }

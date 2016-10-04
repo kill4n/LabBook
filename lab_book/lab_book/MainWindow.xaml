@@ -43,9 +43,9 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="New" Margin="10,10,9.6,10"  Click="new_Click" />
-            <Button Content="Open" Margin="10,10,9.6,10" Click="Button_Click_1" Grid.Column="1"/>
-            <Button Content="Save" Margin="10,10,9.6,10" Click="Button_Click" Grid.Column="2"/>
+            <Button Content="New" Margin="10" Grid.ColumnSpan="3" Click="new_Click" />
+            <!--<Button Content="Open" Margin="10,10,9.6,10" Click="Button_Click_1" Grid.Column="1"/>
+            <Button Content="Save" Margin="10,10,9.6,10" Click="Button_Click" Grid.Column="2"/>-->
         </Grid>
 
     </Grid>

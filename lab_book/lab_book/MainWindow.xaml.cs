@@ -7,6 +7,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace lab_book
 {
@@ -23,18 +25,47 @@ namespace lab_book
         public MainWindow()
         {
             this.labs = new ObservableCollection<LabBook>();
-            ajustes.initStructure();
-            if (File.Exists(pathFile))
-            {
-                IFormatter formatter = new BinaryFormatter();
-                using (Stream stream = new FileStream(pathFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    labs = (ObservableCollection<LabBook>)formatter.Deserialize(stream);
-                    stream.Close();
-                }
-            }
+            this.initStructure();
             InitializeComponent();
             labb.DataContext = labs.FirstOrDefault();
+            readLabs();
+        }
+        void readLabs()
+        {
+            var labDirs = Directory.EnumerateDirectories(ajustes.DataPath + "labbooks").ToList();
+            foreach (var ldir in labDirs)
+            {
+                var serializer = new XmlSerializer(typeof(LabBook));
+                using (var reader = XmlReader.Create(ldir + "/lab.xml"))
+                {
+                    labs.Add((LabBook)serializer.Deserialize(reader));
+                }
+            }
+        }
+
+        public void initStructure()
+        {
+            string pathSet = ajustes.DataPath + "data/setings.xml";
+            if (File.Exists(pathSet))
+            {
+                var serializer = new XmlSerializer(typeof(Settings));
+                using (var reader = XmlReader.Create(pathSet))
+                {
+                    ajustes = (Settings)serializer.Deserialize(reader);
+                }
+            }
+            else
+            {
+                if (!Directory.Exists(ajustes.DataPath + "data"))
+                    Directory.CreateDirectory(ajustes.DataPath + "data");
+                if (!Directory.Exists(ajustes.DataPath + "labbooks"))
+                    Directory.CreateDirectory(ajustes.DataPath + "labbooks");
+                var serializer = new XmlSerializer(ajustes.GetType());
+                using (var writer = XmlWriter.Create(pathSet))
+                {
+                    serializer.Serialize(writer, ajustes);
+                }
+            }
         }
 
         private void listView_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -42,7 +73,7 @@ namespace lab_book
             var item = (sender as ListView).SelectedItem;
             if (item != null)
             {
-                LabBook_window lbv = new LabBook_window((LabBook)item);
+                LabBook_window lbv = new LabBook_window((LabBook)item, ajustes);
                 lbv.ShowTupleDialog();
             }
         }
@@ -53,27 +84,17 @@ namespace lab_book
             if (item != null)
                 labb.DataContext = (LabBook)item;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //save
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(pathFile, FileMode.Create,
-                                     FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, labs);
-            stream.Close();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //Open
-
-        }
+        //save
+        //IFormatter formatter = new BinaryFormatter();
+        //Stream stream = new FileStream(pathFile, FileMode.Create,
+        //                         FileAccess.Write, FileShare.None);
+        //formatter.Serialize(stream, labs);
+        //stream.Close();
 
         private void new_Click(object sender, RoutedEventArgs e)
         {
-            //New
-            LabBook_window lbv = new LabBook_window();
+            //New            
+            LabBook_window lbv = new LabBook_window(ajustes);
             LabBook lbNew = lbv.ShowTupleDialog();
             if (lbNew != null)
             {
